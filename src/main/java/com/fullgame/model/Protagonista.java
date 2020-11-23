@@ -8,20 +8,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="jue_tecnologias")
-public class Tecnologia {
+@Table(name="jue_protagonistas")
+public class Protagonista {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ide_tecnologia")
-	private int ideTecnologia;
-	@Column(name="nombre", length=60)
+	@Column(name="ide_protagonista")
+	private int ideProtagonista;
+	@Column(name="nombre", length=120)
 	private String nombre;
-	public int getIdeTecnologia() {
-		return ideTecnologia;
+	
+	public int getIdeProtagonista() {
+		return ideProtagonista;
 	}
-	public void setIdeTecnologia(int ideTecnologia) {
-		this.ideTecnologia = ideTecnologia;
+	public void setIdeProtagonista(int ideProtagonista) {
+		this.ideProtagonista = ideProtagonista;
 	}
 	public String getNombre() {
 		return nombre;
@@ -29,6 +30,7 @@ public class Tecnologia {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
 	
 	
 	
