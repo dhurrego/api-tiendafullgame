@@ -8,27 +8,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="jue_marcas")
-public class Marca {
+@Table(name="jue_tecnologias")
+public class Tecnologia {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="ide_marca")
-	private int ideMarca;
+	@Column(name="ide_tecnologia")
+	private int ideTecnologia;
 	@Column(name="nombre", length=50)
 	private String nombre;
-	
-	public int getIdeMarca() {
-		return ideMarca;
+	public int getIdeTecnologia() {
+		return ideTecnologia;
 	}
-	public void setIde_marca(int ideMarca) {
-		this.ideMarca = ideMarca;
+	public void setIdeTecnologia(int ideTecnologia) {
+		this.ideTecnologia = ideTecnologia;
 	}
 	public String getNombre() {
 		return nombre;
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}	
+	}
+	
+	
 	
 }

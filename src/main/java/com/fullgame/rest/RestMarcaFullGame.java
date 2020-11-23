@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fullgame.model.Marca;
@@ -32,6 +33,18 @@ public class RestMarcaFullGame {
 		LOG.info("Consultando Marcas");
 		List<Marca> marcas = repoMarca.getMarcas();
 		return ResponseEntity.ok(marcas);
+	}
+	
+	@RequestMapping(value="{ideMarca}", method = RequestMethod.GET)
+	public ResponseEntity<Marca> getMarca(@PathVariable("ideMarca") Integer ideMarca) throws Exception{
+		LOG.info("Consultando una marca");
+		Marca marca = repoMarca.getMarca(ideMarca);
+		if(marca != null) {
+			return ResponseEntity.ok(marca);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+		
 	}
 	
 	@PostMapping

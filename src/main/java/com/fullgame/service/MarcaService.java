@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.fullgame.model.Marca;
 import com.fullgame.repository.IMarcaRepo;
-import com.fullgame.rest.RestMarcaFullGame;
 
 @Service
 public class MarcaService implements IMarcaService{
 
-Logger LOG = LoggerFactory.getLogger(RestMarcaFullGame.class);
+Logger LOG = LoggerFactory.getLogger(MarcaService.class);
 	
 	@Autowired
 	private IMarcaRepo repoMarca;
@@ -25,6 +24,16 @@ Logger LOG = LoggerFactory.getLogger(RestMarcaFullGame.class);
 	public List<Marca> getMarcas() throws Exception{
 		LOG.info("Entrando al servicio Marcas - Metodo getMarcas()");
 		return repoMarca.findAll();
+	}
+	
+	@Override
+	public Marca getMarca(Integer ideMarca) throws Exception {
+		Optional<Marca> optionalProduct = repoMarca.findById(ideMarca);
+		if(optionalProduct.isPresent()) {
+			return optionalProduct.get();
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -57,5 +66,7 @@ Logger LOG = LoggerFactory.getLogger(RestMarcaFullGame.class);
 			return false;
 		}
 	}
+
+	
 
 }
