@@ -51,7 +51,11 @@ public class RestJuegoFullGame {
 	public ResponseEntity<Juego> createJuego(@RequestBody Juego juego) throws Exception{
 		LOG.info("Creando Juego");
 		Juego newJuego = repoJuego.createJuego(juego);
-		return ResponseEntity.ok(newJuego);
+		if(newJuego != null) {
+			return ResponseEntity.ok(newJuego);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	@PutMapping

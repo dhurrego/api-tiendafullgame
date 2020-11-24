@@ -9,8 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.fullgame.model.Director;
 import com.fullgame.model.Juego;
+import com.fullgame.model.Marca;
+import com.fullgame.model.Protagonista;
+import com.fullgame.repository.IDirectorRepo;
 import com.fullgame.repository.IJuegoRepo;
+import com.fullgame.repository.IMarcaRepo;
+import com.fullgame.repository.IProtagonistaRepo;
 
 @Service
 public class JuegoService implements IJuegoService{
@@ -19,6 +25,12 @@ Logger LOG = LoggerFactory.getLogger(JuegoService.class);
 	
 	@Autowired
 	private IJuegoRepo repoJuego;
+	@Autowired
+	private IProtagonistaRepo repoProtagonista;
+	@Autowired
+	private IDirectorRepo repoDirector;
+	@Autowired
+	private IMarcaRepo repoMarca;
 	
 	@Override
 	public List<Juego> getJuegos() throws Exception{
@@ -40,7 +52,33 @@ Logger LOG = LoggerFactory.getLogger(JuegoService.class);
 	@Override
 	public Juego createJuego(Juego juego) throws Exception{
 		LOG.info("Entrando al servicio Juegos - Metodo createJuego()");
-		return repoJuego.save(juego);
+		LOG.info("Consultando si existe Protagonista");
+		Optional<Protagonista> optionalProtagonista = repoProtagonista.findById(juego.getIdeProtagonista());
+		if(optionalProtagonista.isPresent()) {
+			LOG.info("Consultando si existe Director");
+			Optional<Director> optionalDirector = repoDirector.findById(juego.getIdeDirector());
+			if(optionalDirector.isPresent()) {
+				LOG.info("Consultando si existe Marca");
+				Optional<Marca> optionalMarca = repoMarca.findById(juego.getIdeMarca());
+				if(optionalMarca.isPresent()) {
+					LOG.info("Insertando registro");
+					juego.setDirector(optionalDirector.get());
+					juego.setProtagonista(optionalProtagonista.get());
+					juego.setMarca(optionalMarca.get());
+					return repoJuego.save(juego);
+				}else {
+					LOG.info("No existe una marca registrada con el ID indicado");
+					return null;
+				}
+			}else {
+				LOG.info("No existe un director registrado con el ID indicado");
+				return null;
+			}
+		}else {
+			LOG.info("No existe un protagonista registrado con el ID indicado");
+			return null;
+		}
+		
 	}
 	
 	@Override
@@ -48,9 +86,41 @@ Logger LOG = LoggerFactory.getLogger(JuegoService.class);
 		LOG.info("Entrando al servicio Juegos - Metodo updateJuego()");
 		Optional<Juego> optionalJuego = repoJuego.findById(juego.getIdeJuego());
 		if(optionalJuego.isPresent()) {
-			Juego updateJuego = optionalJuego.get();
-			repoJuego.save(updateJuego);
-			return updateJuego;
+			LOG.info("Consultando si existe Protagonista");
+			Optional<Protagonista> optionalProtagonista = repoProtagonista.findById(juego.getIdeProtagonista());
+			if(optionalProtagonista.isPresent()) {
+				LOG.info("Consultando si existe Director");
+				Optional<Director> optionalDirector = repoDirector.findById(juego.getIdeDirector());
+				if(optionalDirector.isPresent()) {
+					LOG.info("Consultando si existe Marca");
+					Optional<Marca> optionalMarca = repoMarca.findById(juego.getIdeMarca());
+					if(optionalMarca.isPresent()) {
+						LOG.info("Actualizando registro");
+						Juego updateJuego = optionalJuego.get();
+						updateJuego.setTitulo(juego.getTitulo());
+						updateJuego.setDescripcion(juego.getDescripcion());
+						updateJuego.setAño(juego.getAño());
+						updateJuego.setPrecioAlquiler(juego.getPrecioAlquiler());
+						updateJuego.setIdeDirector(juego.getIdeDirector());
+						updateJuego.setIdeProtagonista(juego.getIdeProtagonista());
+						updateJuego.setIdeMarca(juego.getIdeMarca());
+						updateJuego.setProtagonista(optionalProtagonista.get());
+						updateJuego.setDirector(optionalDirector.get());
+						updateJuego.setMarca(optionalMarca.get());
+						return repoJuego.save(updateJuego);
+					}else {
+						LOG.info("No existe una marca registrada con el ID indicado");
+						return null;
+					}
+				}else {
+					LOG.info("No existe un director registrado con el ID indicado");
+					return null;
+				}
+			}else {
+				LOG.info("No existe un protagonista registrado con el ID indicado");
+				return null;
+			}
+			
 		}else {
 			return null;
 		}
