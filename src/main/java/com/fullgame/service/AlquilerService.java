@@ -1,15 +1,18 @@
 package com.fullgame.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.fullgame.model.Juego;
@@ -38,7 +41,7 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 	@Override
 	public List<Alquiler> getAlquileres() throws Exception{
 		LOG.info("Entrando al servicio Alquileres - Metodo getAlquileres()");
-		return repoAlquiler.findAll();
+		return repoAlquiler.findAll(Sort.by(Sort.Direction.DESC, "fechaInicio"));
 	}
 	
 	@Override
@@ -65,13 +68,15 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 				Optional<TecnologiaJuego> optionalTecnologiaJuego= repoTecnologiaJuego.findById(alquiler.getIdeTecnologiaJuego());
 				if(optionalTecnologiaJuego.isPresent()) {
 					if(optionalTecnologiaJuego.get().getIdeJuego() == alquiler.getIdeJuego()) {
-						if(alquiler.getFechaFin().getTime() > alquiler.getFechaInicio().getTime()) {
+						if(alquiler.getFechaFin().getTime() >= alquiler.getFechaInicio().getTime()) {
 							LOG.info("Insertando registro");
 							Calendar fecha = Calendar.getInstance();
 							String newIdeAlquiler = "AL" + fecha.getTimeInMillis();
 							alquiler.setIdeAlquiler(newIdeAlquiler);
-							int newPrecioAlquiler = getPrecioAlquiler(optionalJuego.get().getPrecioAlquiler(), alquiler.getFechaInicio(), alquiler.getFechaFin());
+							int newPrecioAlquiler = getPrecioAlquiler(optionalJuego.get().getIdeJuego(), alquiler.getFechaInicio(), alquiler.getFechaFin());
 							alquiler.setPrecioAlquiler(newPrecioAlquiler);
+							
+							
 							alquiler.setJuego(optionalJuego.get());
 							alquiler.setCliente(optionalCliente.get());
 							alquiler.setTecnologiaJuego(optionalTecnologiaJuego.get());
@@ -117,7 +122,7 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 							if(alquiler.getFechaFin().getTime() >= alquiler.getFechaInicio().getTime()) {
 								LOG.info("Actualizando registro");
 								Alquiler updateAlquiler = optionalAlquiler.get();
-								int newPrecioAlquiler = getPrecioAlquiler(optionalJuego.get().getPrecioAlquiler(), alquiler.getFechaInicio(), alquiler.getFechaFin());
+								int newPrecioAlquiler = getPrecioAlquiler(optionalJuego.get().getIdeJuego(), alquiler.getFechaInicio(), alquiler.getFechaFin());
 								updateAlquiler.setIdeJuego(alquiler.getIdeJuego());
 								updateAlquiler.setIdeCliente(alquiler.getIdeCliente());
 								updateAlquiler.setTecnologiaJuego(alquiler.getTecnologiaJuego());
@@ -167,7 +172,7 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 	}
 
 	@Override
-	public int getPrecioAlquiler(int precioAlquilerDia, Date fechaInicio, Date fechaFin) throws Exception {
+	public int getPrecioAlquiler(int ideJuego, Date fechaInicio, Date fechaFin) throws Exception {
 		if(fechaFin.getTime()>=fechaInicio.getTime()) {
 			LOG.info("Calculando el precio del alquiler");
 			long diferencia = fechaFin.getTime() - fechaInicio.getTime(); 
@@ -175,7 +180,7 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 			if(dias == 0) { // En caso de que la fecha fin sea igual a la fecha de inicio
 				dias = 1;
 			}
-			int precio = (int) (precioAlquilerDia * dias);
+			int precio = (int) (repoJuego.findById(ideJuego).get().getPrecioAlquiler() * dias);
 			return precio;
 		}else {
 			return -1;

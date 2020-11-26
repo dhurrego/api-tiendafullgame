@@ -26,7 +26,7 @@ public class Juego implements Serializable {
 	@Column(name="descripcion", length=255)
 	private String descripcion;
 	@Column(name="año")
-	private int año;
+	private int annio;
 	@Column(name="precio_alquiler")
 	private int precioAlquiler;
 
@@ -75,12 +75,12 @@ public class Juego implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public int getAño() {
-		return año;
+	public int getAnnio() {
+		return annio;
 	}
 
-	public void setAño(int año) {
-		this.año = año;
+	public void setAnnio(int annio) {
+		this.annio = annio;
 	}
 
 	public int getPrecioAlquiler() {

@@ -44,6 +44,17 @@ Logger LOG = LoggerFactory.getLogger(TecnologiaJuegoService.class);
 			return null;
 		}
 	}
+	
+	@Override
+	public List<TecnologiaJuego> getTecnologiaJuegoByJuego(Integer ideJuego) throws Exception {
+		LOG.info("Entrando al servicio Tecnologia Juegos - Metodo getTecnologiaJuegoByJuego()");
+		List<TecnologiaJuego> tecnologiaJuegos = repoTecnologiaJuego.findByIdeJuego(ideJuego);
+		if(tecnologiaJuegos.size() > 0) {
+			return tecnologiaJuegos;
+		}else {
+			return null;
+		}
+	}
 
 	@Override
 	public TecnologiaJuego createTecnologiaJuego(TecnologiaJuego tecnologiaJuego) throws Exception{

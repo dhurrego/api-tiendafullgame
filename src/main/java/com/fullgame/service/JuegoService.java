@@ -99,7 +99,7 @@ Logger LOG = LoggerFactory.getLogger(JuegoService.class);
 						Juego updateJuego = optionalJuego.get();
 						updateJuego.setTitulo(juego.getTitulo());
 						updateJuego.setDescripcion(juego.getDescripcion());
-						updateJuego.setAño(juego.getAño());
+						updateJuego.setAnnio(juego.getAnnio());
 						updateJuego.setPrecioAlquiler(juego.getPrecioAlquiler());
 						updateJuego.setIdeDirector(juego.getIdeDirector());
 						updateJuego.setIdeProtagonista(juego.getIdeProtagonista());
