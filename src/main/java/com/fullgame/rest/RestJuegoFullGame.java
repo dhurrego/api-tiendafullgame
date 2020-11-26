@@ -48,6 +48,42 @@ public class RestJuegoFullGame {
 		}
 		
 	}
+	
+	@RequestMapping(value="/protagonista/{ideProtagonista}", method = RequestMethod.GET)
+	public ResponseEntity<List<Juego>> getJuegoByProtagonista(@PathVariable("ideProtagonista") Integer ideProtagonista) throws Exception{
+		LOG.info("Consultando juegos por protagonista");
+		List<Juego> juego = repoJuego.getJuegoByProtagonista(ideProtagonista);
+		if(juego != null) {
+			return ResponseEntity.ok(juego);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
+	
+	@RequestMapping(value="/director/{ideDirector}", method = RequestMethod.GET)
+	public ResponseEntity<List<Juego>> getJuegoByDirector(@PathVariable("ideDirector") Integer ideDirector) throws Exception{
+		LOG.info("Consultando juegos por director");
+		List<Juego> juego = repoJuego.getJuegoByDirector(ideDirector);
+		if(juego != null) {
+			return ResponseEntity.ok(juego);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
+	
+	@RequestMapping(value="/marca/{ideMarca}", method = RequestMethod.GET)
+	public ResponseEntity<List<Juego>> getJuegoByMarca(@PathVariable("ideMarca") Integer ideMarca) throws Exception{
+		LOG.info("Consultando juegos por marca");
+		List<Juego> juego = repoJuego.getJuegoByMarca(ideMarca);
+		if(juego != null) {
+			return ResponseEntity.ok(juego);
+		}else {
+			return ResponseEntity.notFound().build();
+		}
+		
+	}
 		
 	@PostMapping
 	public ResponseEntity<Juego> createJuego(@RequestBody Juego juego) throws Exception{

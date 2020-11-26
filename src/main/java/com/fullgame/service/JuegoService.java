@@ -48,6 +48,39 @@ Logger LOG = LoggerFactory.getLogger(JuegoService.class);
 			return null;
 		}
 	}
+	
+	@Override
+	public List<Juego> getJuegoByProtagonista(Integer ideProtagonista) throws Exception {
+		LOG.info("Entrando al servicio Juegos - Metodo getJuego()");
+		List<Juego> listJuegos = repoJuego.findByIdeProtagonista(ideProtagonista);
+		if(listJuegos.size() > 0) {
+			return listJuegos;
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Juego> getJuegoByDirector(Integer ideDirector) throws Exception {
+		LOG.info("Entrando al servicio Juegos - Metodo getJuegoByDirector()");
+		List<Juego> listJuegos = repoJuego.findByIdeDirector(ideDirector);
+		if(listJuegos.size() > 0) {
+			return listJuegos;
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Juego> getJuegoByMarca(Integer ideMarca) throws Exception {
+		LOG.info("Entrando al servicio Juegos - Metodo getJuegoByMarca()");
+		List<Juego> listJuegos = repoJuego.findByIdeMarca(ideMarca);
+		if(listJuegos.size() > 0) {
+			return listJuegos;
+		}else {
+			return null;
+		}
+	}
 
 	@Override
 	public Juego createJuego(Juego juego) throws Exception{

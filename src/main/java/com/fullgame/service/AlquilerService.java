@@ -1,11 +1,9 @@
 package com.fullgame.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -27,7 +25,7 @@ import com.fullgame.repository.ITecnologiaJuegoRepo;
 @Service
 public class AlquilerService implements IAlquilerService{
 
-Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
+	Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 	
 	@Autowired
 	private IAlquilerRepo repoAlquiler;
@@ -50,6 +48,60 @@ Logger LOG = LoggerFactory.getLogger(AlquilerService.class);
 		Optional<Alquiler> optionalAlquiler = repoAlquiler.findById(ideAlquiler);
 		if(optionalAlquiler.isPresent()) {
 			return optionalAlquiler.get();
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public Juego getJuegoMaxAlquilado() throws Exception {
+		LOG.info("Entrando al servicio Alquileres - Metodo getJuegoMaxAlquilado()");
+		List<Integer> listJuego = repoAlquiler.countJuegoAlquilado();
+		if(listJuego.size() > 0) {
+			Optional<Juego> optionalJuego = repoJuego.findById(listJuego.get(0));
+			if(optionalJuego.isPresent()) {
+				return optionalJuego.get();
+			}else {
+				return null;
+			}
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Alquiler> getAlquilerByFechaInicio(String fechaInicio) throws Exception {
+		LOG.info("Entrando al servicio Alquileres - Metodo getJuegoMaxAlquilado()");
+		List<Alquiler> listJuego = repoAlquiler.findByFechaInicio(fechaInicio);
+		if(listJuego.size() > 0) {
+				return listJuego;
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public Cliente getClienteFrecuente() throws Exception {
+		LOG.info("Entrando al servicio Alquileres - Metodo getClienteFrecuente()");
+		List<String> listCliente = repoAlquiler.countClienteFrecuente();
+		if(listCliente.size() > 0) {
+			Optional<Cliente> optionalCliente = repoCliente.findById(listCliente.get(0));
+			if(optionalCliente.isPresent()) {
+				return optionalCliente.get();
+			}else {
+				return null;
+			}
+		}else {
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Alquiler> getAlquilerByCliente(String ideCliente) throws Exception {
+		LOG.info("Entrando al servicio Alquileres - Metodo getAlquilerByCliente()");
+		List<Alquiler> listCliente = repoAlquiler.findByIdeCliente(ideCliente);
+		if(listCliente.size() > 0) {
+			return listCliente;
 		}else {
 			return null;
 		}

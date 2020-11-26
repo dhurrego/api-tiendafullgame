@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fullgame.model.Alquiler;
+import com.fullgame.model.Cliente;
+import com.fullgame.model.Juego;
 import com.fullgame.service.IAlquilerService;
 
 @RestController
@@ -50,6 +52,53 @@ public class RestAlquilerFullGame {
 		}
 		
 	}
+	
+	@GetMapping(value="/juego-max-alquilado")
+	public ResponseEntity<Juego> getJuegoMaxAlquilado() throws Exception{
+		LOG.info("Consultando Alquileres");
+		Juego juego = repoAlquiler.getJuegoMaxAlquilado();
+		if(juego != null) {
+			return ResponseEntity.ok(juego);
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+	
+	@GetMapping(value="/cliente-frecuente")
+	public ResponseEntity<Cliente> getClienteFrecuente() throws Exception{
+		LOG.info("Consultando Clientes Frecuentes");
+		Cliente cliente = repoAlquiler.getClienteFrecuente();
+		if(cliente != null) {
+			return ResponseEntity.ok(cliente);
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+	
+	@RequestMapping(value="/fecha-inicio/{fechaInicio}", method = RequestMethod.GET)
+	public ResponseEntity<List<Alquiler>> getAlquilerByFechaInicio(@PathVariable("fechaInicio") String fechaInicio) throws Exception{
+		LOG.info("Consultando alquiler por fecha");
+		List<Alquiler> alquiler = repoAlquiler.getAlquilerByFechaInicio(fechaInicio);
+		if(alquiler != null) {
+			return ResponseEntity.ok(alquiler);
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+		
+	}
+	
+	@RequestMapping(value="/cliente/{correo}", method = RequestMethod.GET)
+	public ResponseEntity<List<Alquiler>> getAlquilerByCliente(@PathVariable("correo") String correo) throws Exception{
+		LOG.info("Consultando alquiler por fecha");
+		List<Alquiler> alquiler = repoAlquiler.getAlquilerByCliente(correo);
+		if(alquiler != null) {
+			return ResponseEntity.ok(alquiler);
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+		
+	}
+	
 	
 	@RequestMapping(value="/precio/{precioDia}/{fechaInicio}/{fechaFin}", method = RequestMethod.GET)
 	public ResponseEntity<Integer> getPrecioAlquiler(@PathVariable("precioDia") int precioAlquilerDia, 
